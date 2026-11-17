@@ -38,20 +38,14 @@ public class AppointmentDAO {
     public ArrayList<Appointment> getAppointmentsByPatient(String username) throws Exception {
 
         ArrayList<Appointment> appointments = new ArrayList<>();
-
         String sql = "SELECT * FROM appointments WHERE patient_username = ?";
-
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement ps = con.prepareStatement(sql)) {
-
             ps.setString(1, username);
-
             try (ResultSet rs = ps.executeQuery()) {
-
                 while (rs.next()) {
-
                     Appointment appointment = new Appointment(
                             rs.getInt("appointment_id"),
                             rs.getString("patient_username"),
@@ -60,29 +54,22 @@ public class AppointmentDAO {
                             rs.getString("symptoms"),
                             rs.getString("status")
                     );
-
                     appointments.add(appointment);
                 }
             }
         }
-
         return appointments;
     }
     
     public ArrayList<Appointment> getAllAppointments() throws Exception {
-
         ArrayList<Appointment> appointments = new ArrayList<>();
-
         String sql = "SELECT * FROM appointments";
-
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
-
                 Appointment appointment = new Appointment(
                         rs.getInt("appointment_id"),
                         rs.getString("patient_username"),
@@ -91,26 +78,20 @@ public class AppointmentDAO {
                         rs.getString("symptoms"),
                         rs.getString("status")
                 );
-
                 appointments.add(appointment);
             }
         }
-
         return appointments;
     }
     
     public void updateStatus(int appointmentId, String status) throws Exception {
-
         String sql = "UPDATE appointments SET status = ? WHERE appointment_id = ?";
-
         Class.forName("com.mysql.cj.jdbc.Driver");
-
         try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setInt(2, appointmentId);
-
             ps.executeUpdate();
         }
     }
