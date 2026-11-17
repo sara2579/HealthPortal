@@ -124,10 +124,19 @@
                 <option value="Ophthalmology">Ophthalmology</option>
             </select>
 
-            <label>Appointment Date and Time</label>
+            <label>Appointment Date</label>
+            <input type="date"
+                   id="appointmentDate"
+                   name="appointmentDate"
+                   required>
 
-            <input type="datetime-local"
-                   name="appointmentDate" required>
+            <label>Appointment Time (7:00 AM - 5:00 PM)</label>
+            <input type="time"
+                   id="appointmentTime"
+                   name="appointmentTime"
+                   min="07:00"
+                   max="17:00"
+       required>
 
             <label>Symptoms</label>
 
@@ -190,5 +199,43 @@
             </c:choose>
         </div>
     </div>
+        
+    <script>
+        const dateInput = document.getElementById("appointmentDate");
+        const timeInput = document.getElementById("appointmentTime");
+
+        // Get today's date in YYYY-MM-DD format
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const todayString = year + "-" + month + "-" + day;
+
+        // Prevent selecting dates before today
+        dateInput.min = todayString;
+
+        // When the patient selects a date
+        dateInput.addEventListener("change", function () {
+
+            if (dateInput.value === todayString) {
+
+                // If today is selected, prevent selecting past times
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+
+                timeInput.min = hours + ":" + minutes;
+
+            } else {
+
+                // For future dates, allow the full office hours
+                timeInput.min = "07:00";
+            }
+
+            timeInput.value = "";
+        });
+    </script>
+        
 </body>
 </html>
