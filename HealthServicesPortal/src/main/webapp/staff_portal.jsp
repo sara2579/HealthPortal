@@ -3,177 +3,224 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Staff Portal</title>
+    <head>
+        <title>Staff Portal</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #4895cf;
-            margin: 0;
-            padding: 0;
-        }
+        <style>
+            body {
+                font-family: system-ui, -apple-system, Arial, sans-serif;
+                background-color: #eef2f1;
+                color: #1e293b;
+                margin: 0;
+                padding: 24px;
+            }
 
-        .container {
-            width: 750px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #FFF9F4;
-            border-radius: 12px;
-        }
+            .container {
+                max-width: 820px;
+                margin: 24px auto;
+                padding: 24px;
+                background-color: #ffffff;
+                border: 1px solid #d5dfe2;
+                border-radius: 10px;
+            }
 
-        h1, h2 {
-            color: #145485;
-        }
+            .topbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 12px;
+                margin-bottom: 16px;
+                border-bottom: 1px solid #e2e8f0;
+            }
 
-        p {
-            color: #70554a;
-        }
+            .topbar h1 {
+                margin: 0;
+                font-size: 20px;
+                color: #1f4e5f;
+            }
 
-        .logout {
-            display: block;
-            text-align: right;
-            color: #145485;
-            margin-bottom: 20px;
-        }
+            .logout {
+                color: #1f4e5f;
+                text-decoration: none;
+                font-size: 14px;
+            }
 
-        .appointment-card {
-            background-color: white;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-        }
+            .logout:hover {
+                text-decoration: underline;
+            }
 
-        label {
-            color: #654B3C;
-        }
+            h2 {
+                font-size: 16px;
+                color: #1f4e5f;
+                margin: 12px 0 8px;
+            }
 
-        select {
-            padding: 8px;
-            border: 1px solid #E8C7B5;
-            border-radius: 6px;
-        }
+            p {
+                color: #475569;
+                margin: 3px 0;
+                font-size: 13px;
+            }
 
-        button {
-            padding: 9px 15px;
-            margin-top: 10px;
-            background-color: #286da1;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+            .queue-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+                gap: 12px;
+                margin-top: 12px;
+            }
 
-        button:hover {
-            background-color: #1d5c8c;
-        }
+            .appointment-card {
+                background-color: #f8fafc;
+                border: 1px solid #e2e8f0;
+                padding: 10px 12px;
+                border-radius: 8px;
+            }
 
-        .status {
-            padding: 5px;
-            border-radius: 5px;
-        }
+            .status-form {
+                margin-top: 8px;
+                padding-top: 8px;
+                border-top: 1px solid #e2e8f0;
+            }
 
-        .pending {
-            background-color: #fff3cd;
-        }
+            label {
+                font-size: 12px;
+                color: #334155;
+            }
 
-        .confirmed {
-            background-color: #d4edda;
-        }
+            select {
+                padding: 5px 7px;
+                border: 1px solid #cbd5e1;
+                border-radius: 5px;
+                font-size: 12px;
+            }
 
-        .completed {
-            background-color: #cce5ff;
-        }
+            button {
+                padding: 6px 10px;
+                margin-top: 6px;
+                background-color: #1f4e5f;
+                color: #ffffff;
+                border: none;
+                border-radius: 5px;
+                font-size: 12px;
+                cursor: pointer;
+            }
 
-    </style>
-</head>
+            button:hover {
+                background-color: #163a47;
+            }
 
-<body>
+            .status {
+                padding: 2px 7px;
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: 600;
+            }
 
-    <div class="container">
-        <a class="logout" href="LogoutServlet">Log Out</a>
+            .pending {
+                background-color: #fef3c7;
+                color: #92400e;
+            }
 
-        <h1>Staff Portal</h1>
-        <h2>Welcome, <c:out value="${sessionScope.fullName}" />!</h2>
-        <h2>Patient Appointment Queue</h2>
+            .confirmed {
+                background-color: #dcfce7;
+                color: #166534;
+            }
 
-        <c:choose>
-            <c:when test="${empty appointments}">
-                <p>There are no appointments yet.</p>
-            </c:when>
+            .completed {
+                background-color: #dbeafe;
+                color: #1e40af;
+            }
+        </style>
+    </head>
 
-            <c:otherwise>
-                <c:forEach var="app" items="${appointments}">
-                    <div class="appointment-card">
-                        <p>
-                            <strong>Patient:</strong>
-                            <c:out value="${app.patientUsername}" />
-                        </p>
+    <body>
 
-                        <p>
-                            <strong>Department:</strong>
-                            <c:out value="${app.department}" />
-                        </p>
+        <div class="container">
+            <div class="topbar">
+                <h1>Staff Portal - <c:out value="${sessionScope.fullName}" /></h1>
+                <a class="logout" href="LogoutServlet">Log Out</a>
+            </div>
 
-                        <p>
-                            <strong>Date:</strong>
-                            <c:out value="${app.appointmentDate}" />
-                        </p>
+            <h2>Patient Appointment Queue</h2>
 
-                        <p>
-                            <strong>Symptoms:</strong>
-                            <c:out value="${app.symptoms}" />
-                        </p>
+            <c:choose>
+                <c:when test="${empty appointments}">
+                    <p>There are no appointments yet.</p>
+                </c:when>
 
-                        <p>
-                            <strong>Status:</strong>
+                <c:otherwise>
+                    <div class="queue-grid">
+                        <c:forEach var="app" items="${appointments}">
+                            <div class="appointment-card">
+                                <p>
+                                    <strong>Patient:</strong>
+                                    <c:out value="${app.patientUsername}" />
+                                </p>
 
-                            <c:choose>
-                                <c:when test="${app.status == 'PENDING'}">
-                                    <span class="status pending">PENDING</span>
-                                </c:when>
+                                <p>
+                                    <strong>Department:</strong>
+                                    <c:out value="${app.department}" />
+                                </p>
 
-                                <c:when test="${app.status == 'CONFIRMED'}">
-                                    <span class="status confirmed">CONFIRMED</span>
-                                </c:when>
+                                <p>
+                                    <strong>Date:</strong>
+                                    <c:out value="${app.appointmentDate}" />
+                                </p>
 
-                                <c:when test="${app.status == 'COMPLETED'}">
-                                    <span class="status completed">COMPLETED</span>
-                                </c:when>
-                            </c:choose>
-                        </p>
+                                <p>
+                                    <strong>Symptoms:</strong>
+                                    <c:out value="${app.symptoms}" />
+                                </p>
 
-                        <form action="StaffServlet" method="POST">
+                                <p>
+                                    <strong>Status:</strong>
 
-                            <input type="hidden"
-                                   name="appointmentId"
-                                   value="<c:out value='${app.appointmentId}' />">
+                                    <c:choose>
+                                        <c:when test="${app.status == 'PENDING'}">
+                                            <span class="status pending">PENDING</span>
+                                        </c:when>
 
-                            <label>Update Status:</label>
+                                        <c:when test="${app.status == 'CONFIRMED'}">
+                                            <span class="status confirmed">CONFIRMED</span>
+                                        </c:when>
 
-                            <select name="status" required>
+                                        <c:when test="${app.status == 'COMPLETED'}">
+                                            <span class="status completed">COMPLETED</span>
+                                        </c:when>
+                                    </c:choose>
+                                </p>
 
-                                <option value="PENDING"
-                                    ${app.status == 'PENDING' ? 'selected' : ''}>
-                                    Pending
-                                </option>
+                                <form class="status-form" action="StaffServlet" method="POST">
 
-                                <option value="CONFIRMED"
-                                    ${app.status == 'CONFIRMED' ? 'selected' : ''}>
-                                    Confirmed
-                                </option>
+                                    <input type="hidden"
+                                           name="appointmentId"
+                                           value="<c:out value='${app.appointmentId}' />">
 
-                                <option value="COMPLETED"
-                                    ${app.status == 'COMPLETED' ? 'selected' : ''}>
-                                    Completed
-                                </option>
-                            </select>
-                            <button type="submit">Update Status</button>
-                        </form>
+                                    <label>Status:</label>
+
+                                    <select name="status" required>
+
+                                        <option value="PENDING"
+                                                ${app.status == 'PENDING' ? 'selected' : ''}>
+                                            Pending
+                                        </option>
+
+                                        <option value="CONFIRMED"
+                                                ${app.status == 'CONFIRMED' ? 'selected' : ''}>
+                                            Confirmed
+                                        </option>
+
+                                        <option value="COMPLETED"
+                                                ${app.status == 'COMPLETED' ? 'selected' : ''}>
+                                            Completed
+                                        </option>
+                                    </select>
+                                    <button type="submit">Update</button>
+                                </form>
+                            </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
-            </c:otherwise>
-        </c:choose>
-    </div>
-</body>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </body>
 </html>

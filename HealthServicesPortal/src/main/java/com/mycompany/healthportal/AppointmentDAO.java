@@ -1,4 +1,4 @@
-package com.taxx.healthservicesportal;
+package com.mycompany.healthportal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,9 +9,26 @@ import java.util.ArrayList;
 
 public class AppointmentDAO {
 
-    private String url = "jdbc:mysql://localhost:3306/health_portal_db";
-    private String dbUser = "root";
-    private String dbPassword = "";
+    // Set to true for Apache Derby, or false for MySQL (XAMPP)
+    private static final boolean USE_DERBY = true;
+
+    private static final String DERBY_URL = "jdbc:derby://localhost:1527/health_portal_db;create=true";
+    private static final String DERBY_USER = "app";
+    private static final String DERBY_PASSWORD = "app";
+
+    private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/health_portal_db";
+    private static final String MYSQL_USER = "root";
+    private static final String MYSQL_PASSWORD = "";
+
+    private Connection getConnection() throws Exception {
+        if (USE_DERBY) {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            return DriverManager.getConnection(DERBY_URL, DERBY_USER, DERBY_PASSWORD);
+        } else {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
+        }
+    }
 
     public void createAppointment(Appointment appointment) throws Exception {
 
@@ -19,9 +36,7 @@ public class AppointmentDAO {
                 + "(patient_username, department, appointment_date, symptoms, status) "
                 + "VALUES (?, ?, ?, ?, ?)";
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-
-        try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
+        try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, appointment.getPatientUsername());
@@ -34,14 +49,13 @@ public class AppointmentDAO {
             ps.executeUpdate();
         }
     }
-    
+
     public ArrayList<Appointment> getAppointmentsByPatient(String username) throws Exception {
 
         ArrayList<Appointment> appointments = new ArrayList<>();
         String sql = "SELECT * FROM appointments WHERE patient_username = ?";
-        Class.forName("com.mysql.cj.jdbc.Driver");
 
-        try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
+        try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,13 +74,12 @@ public class AppointmentDAO {
         }
         return appointments;
     }
-    
+
     public ArrayList<Appointment> getAllAppointments() throws Exception {
         ArrayList<Appointment> appointments = new ArrayList<>();
         String sql = "SELECT * FROM appointments";
-        Class.forName("com.mysql.cj.jdbc.Driver");
 
-        try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
+        try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -83,11 +96,11 @@ public class AppointmentDAO {
         }
         return appointments;
     }
-    
+
     public void updateStatus(int appointmentId, String status) throws Exception {
         String sql = "UPDATE appointments SET status = ? WHERE appointment_id = ?";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection con = DriverManager.getConnection(url, dbUser, dbPassword);
+
+        try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, status);

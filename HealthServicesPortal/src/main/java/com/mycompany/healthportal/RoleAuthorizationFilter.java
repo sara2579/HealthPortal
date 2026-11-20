@@ -1,4 +1,4 @@
-package com.taxx.healthservicesportal;
+package com.mycompany.healthportal;
 
 import java.io.IOException;
 import jakarta.servlet.Filter;
@@ -38,7 +38,7 @@ public class RoleAuthorizationFilter implements Filter {
         if (session == null
                 || session.getAttribute("authenticatedUser") == null) {
 
-            res.sendRedirect(req.getContextPath() + "/index.jsp");
+            res.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 

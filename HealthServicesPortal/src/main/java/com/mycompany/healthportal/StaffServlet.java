@@ -1,4 +1,4 @@
-package com.taxx.healthservicesportal;
+package com.mycompany.healthportal;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -18,7 +18,7 @@ public class StaffServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("authenticatedUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
@@ -49,7 +49,7 @@ public class StaffServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("authenticatedUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 

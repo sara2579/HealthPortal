@@ -1,4 +1,4 @@
-package com.taxx.healthservicesportal;
+package com.mycompany.healthportal;
 
 import org.mindrot.jbcrypt.BCrypt;
 
